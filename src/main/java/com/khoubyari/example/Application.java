@@ -6,7 +6,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -35,6 +37,21 @@ public class Application extends SpringBootServletInitializer {
     protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
         return application.sources(applicationClass);
     }
+
+
+    @Bean
+    public FilterRegistrationBean testFilterRegistration() {
+
+        FilterRegistrationBean registration = new FilterRegistrationBean();
+        registration.setFilter(new TestFilterFirst());
+        registration.addUrlPatterns("/*");
+        registration.addInitParameter("paramName", "paramValue");
+        registration.setName("testFilter");
+        registration.setOrder(1);
+        return registration;
+    }
+
+
     
 
 }
