@@ -1,10 +1,12 @@
 package com.khoubyari.example;
 
+import net.minidev.json.JSONObject;
 import org.springframework.core.annotation.Order;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import java.io.IOException;
+import java.io.PrintWriter;
 
 /**
  * Created by xiu on 11/12/17.
@@ -21,8 +23,23 @@ public class TestFilterFirst implements Filter {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
             throws IOException, ServletException {
-        System.out.println("TestFilter1");
-        filterChain.doFilter(servletRequest,servletResponse);
+
+
+        String token  = servletRequest.getParameter("token");
+
+        System.out.println("token is"+token);
+        if("xiuxiu123456".equals(token)){
+            filterChain.doFilter(servletRequest,servletResponse);
+        }else{
+            servletResponse.setContentType("application/json");
+            servletResponse.setCharacterEncoding("utf-8");
+            PrintWriter out = servletResponse.getWriter();
+
+            //create Json Object
+            JSONObject json = new JSONObject();
+            json.put("token", "token is invalid");
+            out.print(json.toString());
+        }
     }
 
     @Override
